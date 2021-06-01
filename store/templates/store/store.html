@@ -2,40 +2,33 @@
 {% load static %}
 {% block content %}
 <div class="row">
-	<div class="col-lg-4">
-        <img class="thumbnail" src="{% static 'images/placeholder.png' %}">
-		<div class="box-element product">
-            <h6><strong>Product</strong></h6>
-		    <hr>
-
-		    <button  class="btn btn-outline-secondary add-btn">Add to Cart</button>
-		    <a class="btn btn-outline-success" href="#">View</a>
-		    <h4 style="display: inline-block; float: right"><strong>$20</strong></h4>
-		</div>
-	</div>
+	{% for product in products %}
+	<!––These are bootstrap specific classes for row and column-->
+	<!––As per the Bootstrap grid system, rows are wrappers for columns. Column classes indicate the number column classes-->
+	<!––one would like to use out of the possible 12. So if want 3 equal width columns .col-4 is used-->
+		<!––Note: Earlier the .col-4 was used three times including the below one (For 3 dummy placeholders)-->
+	<!––Now we will be using a for loop to loop through the products itself which will output these dynamically as per the number of products-->
 
 	<div class="col-lg-4">
-        <img class="thumbnail" src="{% static 'images/placeholder.png' %}">
-		<div class="box-element product">
-            <h6><strong>Product</strong></h6>
-		    <hr>
 
-		    <button  class="btn btn-outline-secondary add-btn">Add to Cart</button>
-		    <a class="btn btn-outline-success" href="#">View</a>
-		    <h4 style="display: inline-block; float: right"><strong>$20</strong></h4>
+		<!––thumbnail class to make changes to the image that we are using.-->
+		<img class="thumbnail" src="{{product.imageURL}}">
+
+		<!––We are then adding our own wrapper i.e. box-element and product to make necessary changes to the elements present inside-->
+		<div class="box-element product">
+			<h6><strong>{{product.name}}</strong></h6>
+			<hr>
+
+			<!––Here we are customizing it according to Bootstrap class as well as our button class (add-btn)-->
+			<button  class="btn btn-outline-secondary add-btn">Add to Cart</button>
+
+			<!––We can also use the Bootstrap btn class for 'a' tag-->
+			<a class="btn btn-outline-success" href="#">View</a>
+
+			<!––Here we want to display the Strong (bold) value to be inline with the the button and a tag-->
+			<h4 style="display: inline-block; float: right"><strong>${{product.price|floatformat:2}}</strong></h4>
 		</div>
 	</div>
-
-	<div class="col-lg-4">
-        <img class="thumbnail" src="{% static 'images/placeholder.png' %}">
-		<div class="box-element product">
-            <h6><strong>Product</strong></h6>
-		    <hr>
-
-		    <button  class="btn btn-outline-secondary add-btn">Add to Cart</button>
-		    <a class="btn btn-outline-success" href="#">View</a>
-		    <h4 style="display: inline-block; float: right"><strong>$20</strong></h4>
-		</div>
-	</div>
+{% endfor %}
 </div>
 {% endblock content %}
