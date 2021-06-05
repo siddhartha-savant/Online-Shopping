@@ -20,7 +20,11 @@
 			<hr>
 
 			<!––Here we are customizing it according to Bootstrap class as well as our button class (add-btn)-->
-			<button  class="btn btn-outline-secondary add-btn">Add to Cart</button>
+			<!––We want to add event handlers to the button when pressed. So to identify a certain button that is clicked, first we'll need to add a class eg. 'update-cart'-->
+			<!––Also note we want to keep the event ("Add to Cart") consistent with the cart arrow buttons. For this we'll need to create custom attributes-->
+			<!––We can create a custom attribute by using data-*, where * is the attribute name that we want. The custom attributes help us in getting respective data that we want-->
+			<!––This data can then be accessed in javascript file (In our case in cart.js)-->
+			<button data-product={{product.id}} data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
 
 			<!––We can also use the Bootstrap btn class for 'a' tag-->
 			<a class="btn btn-outline-success" href="#">View</a>

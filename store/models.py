@@ -58,6 +58,22 @@ class Order(models.Model):
     def __str__(self):
         return str(self.id)
 
+# Will be used as an attribute because of the decorator property. To find the total price of all the orderitems. This
+# is the right approach. We would have instead calculated the value at the frontend for every order item and then added
+# them all up.
+    @property
+    def get_cart_total(self):
+        orderitems = self.orderitem_set.all()
+        total = sum([item.get_total for item in orderitems])
+        return total
+
+# This is for number of items in a cart
+    @property
+    def get_cart_items(self):
+        orderitems = self.orderitem_set.all()
+        total = sum([item.quantity for item in orderitems])
+        return total
+
 # The Class OrderItem is in general the entity that will be added to the cart.
 # Items that need to be added to our order. We are using many to one field for product attribute. Also for order
 # attribute we will be using many to one field. date_added is the date when the orderitem is added to the cart(order)
@@ -74,6 +90,13 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return self.product.name
+
+# Will be used as an attribute because of the decorator property. To find the total price of the order item. This the
+# right approach. We would have instead calculated the value at the frontend for every order item
+    @property
+    def get_total(self):
+        total = self.product.price * self.quantity
+        return total
 
 
 class ShippingAddress(models.Model):
