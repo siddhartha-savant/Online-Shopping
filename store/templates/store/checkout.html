@@ -42,6 +42,7 @@
 		<!––the payment option to appear after that's done-->
 		<div class="box-element hidden" id="payment-info">
 			<small>Paypal Options</small>
+			<button id="make-payment">Make payment</button>
 		</div>
 	</div>
 
@@ -64,4 +65,78 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+// We are basically adding a hidden class to the form-button. This will basically hide the submit button once it is
+// pressed. The hidden class for the payment option is removed once the submit button is pressed so that it becomes
+// visible. If the user is logged in, hide the user-info id which is the name and the email as it will be provided
+// when the user is created. Also to sent the value to the views for processing we created objects of 'userFormData' and
+// 'shippingInfo'. We'll send this data to the backend. And once it is send, we want to return a promise (which will be
+// the string "payment complete" of the process-order function)
+
+	var total = '{{order.get_cart_total}}'
+
+	if (user != 'AnonymousUser'){
+		document.getElementById('user-info').innerHTML = ''
+	}
+
+	var form = document.getElementById('form')
+	form.addEventListener('submit',function(e){
+		e.preventDefault()
+		console.log('form submitted')
+		document.getElementById('form-button').classList.add('hidden')
+		document.getElementById('payment-info').classList.remove('hidden')
+	})
+
+	document.getElementById('make-payment').addEventListener('click', function(e){
+		submitFormData()
+	})
+
+	function submitFormData(){
+		console.log('Payment is successful')
+
+		var userFormData = {
+			'name':null,
+			'email':null,
+			'total':total,
+		}
+
+		var shippingInfo = {
+			'address':null,
+			'city':null,
+			'state':null,
+			'zipcode':null,
+		}
+
+		// We are able to access these variables from the values submitted in the form. These form variables are then set as the
+		// shippingInfo and userFormData values
+
+		shippingInfo.address = form.address.value
+		shippingInfo.city = form.city.value
+		shippingInfo.state = form.state.value
+		shippingInfo.zipcode = form.zipcode.value
+
+		if(user == 'AnonymousUser'){
+			userFormData.name = form.name.value
+			userFormData.email = form.email.value
+		}
+
+		var url = '/process_order/'
+		fetch(url, {
+			method:'POST',
+			headers:{
+				'Content-Type': 'application/json',
+				'X-CSRFToken': csrftoken
+        	},
+        	body:JSON.stringify({'userFormData': userFormData, 'shippingInfo': shippingInfo})
+    	})
+
+		// The window.location line sends the user back to the specified url. In this case the home page
+    	.then((response) => response.json())
+    	.then((data) => {
+    		console.log('Success:', data);
+    		alert('Transaction completed');
+    		window.location.href = "{% url 'store' %}"
+    	})
+	}
+</script>
 {% endblock content %}

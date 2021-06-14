@@ -14,7 +14,7 @@
     <script type="text/javascript">
         var user = '{{request.user}}'
 
-    <!––With this we are creating a CSRF token which will be available in the fetch call -->
+    //With this we are creating a CSRF token which will be available in the fetch call
         function getToken(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -52,9 +52,10 @@
         <div class="form-inline my-2 my-lg-0">
             <a href="#" class="btn btn-warning">Login</a>
             <a href="{% url 'cart' %}">
+                <!––id values can also be accessed in css. For ids, # is used (check main.css for cart-icon and cart-total)-->
                 <img  id="cart-icon" src="{% static 'images/cart.png' %}">
             </a>
-            <p id="cart-total">0</p>
+            <p id="cart-total">{{cart_items}}</p>
         </div>
     </div>
 </nav>

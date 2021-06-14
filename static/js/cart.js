@@ -26,6 +26,8 @@ for(var i=0; i<updateBtns.length; i++){
 // data has to be in string format. Thus the JSON.stringify method is used. Once we send that data we also want to
 // return a promise. We first need to turn this value into JSON data. (We are doing that using the 1st .then method)
 // The second .then method is used to send the data that the view is sending back to the template
+// fetch api sends the data back to the views.py (server side) and returns a promise to the client side.
+// location.reload is used to reload the page. (this is done so as to update the number in red present near the cart)
 function updateUserOrder(productId, action){
     console.log('User is logged in, sending data..')
 
@@ -35,9 +37,9 @@ function updateUserOrder(productId, action){
         method: 'POST',
         headers:{
         'Content-Type': 'application/json',
-        'X-CSRFToken': csrftoken,
+        'X-CSRFToken': csrftoken
         },
-        body:JSON.stringify({'productId': productId, 'action', action})
+        body:JSON.stringify({'productId': productId, 'action': action})
     })
 
     .then((response)=>{
@@ -46,6 +48,7 @@ function updateUserOrder(productId, action){
 
     .then((data)=>{
         console.log('data:', data)
+        location.reload()
     })
 
 }
