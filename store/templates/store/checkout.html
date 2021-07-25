@@ -130,11 +130,17 @@
         	body:JSON.stringify({'userFormData': userFormData, 'shippingInfo': shippingInfo})
     	})
 
-		// The window.location line sends the user back to the specified url. In this case the home page
+		// The window.location line sends the user back to the specified url. In this case the home page.
+		// We are also resetting the cart variable in our cookie when the checkout button is pressed. (This is the
+		// promise for the checkout button when it is pressed)
     	.then((response) => response.json())
     	.then((data) => {
     		console.log('Success:', data);
     		alert('Transaction completed');
+
+    		cart = {}
+    		document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+
     		window.location.href = "{% url 'store' %}"
     	})
 	}

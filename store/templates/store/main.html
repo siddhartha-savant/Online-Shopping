@@ -31,6 +31,39 @@
             return cookieValue;
         }
         const csrftoken = getToken('csrftoken');
+
+
+    // We are creating this function to get the cookie by its name for authenticated and unauthenticated users
+    function getCookie(name){
+            //Split cookie string and get all individual name=value pairs in an array
+        var cookieArr = document.cookie.split(";");
+
+        //Loop through the array elements
+        for(var i=0; i<cookieArr.length; i++){
+            var cookiePair = cookieArr[i].split("=");
+
+            //Removing white space at the beginning of the cookie name and comparing it with the string
+            if(name == cookiePair[0].trim()){
+                //Decode the cookie value and return
+                return decodeURIComponent(cookiePair[1]);
+            }
+
+        }
+
+        //Return null if not found
+        return null;
+    }
+
+    // If the getCookie returns null, the cart variable will be undefined. We are then creating a new object for the cart variable.
+    // Note: Once the if statement is true, as now an object has been, the if condition won't run again.
+    var cart = JSON.parse(getCookie('cart'))
+    if(cart == undefined){
+        cart = {}
+        console.log('Cart was created')
+        document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+    }
+    console.log('Cart:', cart)
+
     </script>
 
 </head>

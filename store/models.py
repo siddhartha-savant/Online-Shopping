@@ -22,7 +22,7 @@ class Customer(models.Model):
 # in urls
 class Product(models.Model):
     name = models.CharField(max_length=200)
-    price = models.FloatField()
+    price = models.DecimalField(max_digits=7, decimal_places=2)
     image = models.ImageField(null=True, blank=True)
 
     def __str__(self):
@@ -43,7 +43,7 @@ class Product(models.Model):
 
 
 # Customer will have a many to one relationship with order object that means that customer can have multiple orders.
-# complete field is to indicate whether the cart is open or ite closed.If its open, ie if value is false we can continue
+# complete field is to indicate whether the cart is open or its closed.If its open, ie if value is false we can continue
 # to add items to the cart. If its true, it is a closed cart and we cannot add items to it.
 # Also we have set the on_delete value to NULL and not delete. This is because if the customer gets deleted we don't
 # want to delete the order, we just want to set the customer value to NULL

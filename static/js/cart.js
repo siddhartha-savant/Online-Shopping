@@ -13,12 +13,42 @@ for(var i=0; i<updateBtns.length; i++){
         console.log('productId:', productId, 'action:', action)
 
         console.log('USER:', user)
-        if(user === 'AnonymousUser'){
-            console.log('Not logged in')
+        if(user == 'AnonymousUser'){
+            addCookieItem(productId, action);
         }else{
             updateUserOrder(productId, action)
         }
     })
+}
+
+// We are able to access cart variable as it is mentioned in the head of main.html. We then go into the cart and check for the corresponding
+// product id. If found undefined (item not added yet), we increase the quantity by 1. The cart is a dictionary with key value pairs where
+// productId is the key. We are then overwriting the changes we made to cart object into the cookie. Now we need to update the total (red number)
+// and call our views again (cart view, checkout view)
+function addCookieItem(productId, action){
+    console.log('Not logged in..')
+
+    if(action == 'add'){
+        if(cart[productId] == undefined){
+            cart[productId] = {'quantity':1}
+            console.log(cart)
+        }else{
+            cart[productId]['quantity'] += 1
+        }
+    }
+
+    if(action == 'remove'){
+        cart[productId]['quantity'] -= 1
+
+        if(cart[productId]['quantity'] <= 0){
+            console.log('Remove Item')
+            delete cart[productId]
+        }
+    }
+    console.log('Cart:',cart)
+    document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+    location.reload()
+
 }
 
 // For fetch function, the first parameter is where we want to send the data. The second parameter is what kind of data
