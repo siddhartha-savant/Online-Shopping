@@ -42,7 +42,8 @@
 		<!––the payment option to appear after that's done-->
 		<div class="box-element hidden" id="payment-info">
 			<small>Paypal Options</small>
-			<button id="make-payment">Make payment</button>
+			 <div id="paypal-button-container"></div>
+			<!--button id="make-payment">Make payment</button-->
 		</div>
 	</div>
 
@@ -65,6 +66,47 @@
 		</div>
 	</div>
 </div>
+
+<script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD&disable-funding=credit"></script>
+
+ <script>
+ 		var total = '{{order.get_cart_total}}'
+        // Render the PayPal button into #paypal-button-container
+        paypal.Buttons({
+
+        	style:{
+				color:'blue',
+				shape:'rect',
+        	},
+
+            // Set up the transaction
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: parseFloat(total).toFixed(2)
+                        }
+                    }]
+                });
+            },
+
+            // Finalize the transaction
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(orderData) {
+                    submitFormData()
+
+                    // Replace the above to show a success message within this page, e.g.
+                    // const element = document.getElementById('paypal-button-container');
+                    // element.innerHTML = '';
+                    // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+                    // Or go to another URL:  actions.redirect('thank_you.html');
+                });
+            }
+
+
+        }).render('#paypal-button-container');
+ </script>
+
 <script type="text/javascript">
 // We are basically adding a hidden class to the form-button. This will basically hide the submit button once it is
 // pressed. The hidden class for the payment option is removed once the submit button is pressed so that it becomes
@@ -73,7 +115,7 @@
 // 'shippingInfo'. We'll send this data to the backend. And once it is send, we want to return a promise (which will be
 // the string "payment complete" of the process-order function)
 
-	var total = '{{order.get_cart_total}}'
+
 
 	if (user != 'AnonymousUser'){
 		document.getElementById('user-info').innerHTML = ''
@@ -87,9 +129,11 @@
 		document.getElementById('payment-info').classList.remove('hidden')
 	})
 
+	/*
 	document.getElementById('make-payment').addEventListener('click', function(e){
 		submitFormData()
 	})
+	*/
 
 	function submitFormData(){
 		console.log('Payment is successful')
